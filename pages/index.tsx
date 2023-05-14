@@ -22,7 +22,7 @@ const defaultPrefs = [
 
 export default function Home() {
   const [adIndex, setAdIndex] = useState<number>(0);
-  const [userPreferences, setUserPreferences] = useState(defaultPrefs);
+  const [userPreferences, setUserPreferences] = useState<string[]>([]);
 
   const [ads, setAds] = useState<TAd[]>([
     {
@@ -60,7 +60,7 @@ export default function Home() {
       });
       try {
         const prefs = await prefsRes.json();
-        setUserPreferences(prefs.groups ?? defaultPrefs);
+        setUserPreferences(prefs.groups);
       } catch (error) {
         setUserPreferences(defaultPrefs);
       }
