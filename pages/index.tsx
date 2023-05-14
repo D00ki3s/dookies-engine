@@ -62,6 +62,7 @@ export default function Home() {
         const prefs = await prefsRes.json();
         setUserPreferences(prefs.groups);
       } catch (error) {
+        console.log(error)
         setUserPreferences(defaultPrefs);
       }
     }
@@ -70,6 +71,24 @@ export default function Home() {
 
   useEffect(() => {
     async function getAds() {
+
+      if(!userPreferences || userPreferences.length == 0){
+        setAds([{
+          name: "Dookies",
+          owner: "0x",
+          paused: false,
+          adCreative:
+            "https://ipfs.io/ipfs/bafyreidserj6273qknetwkanbtolhbqf4j2xa37wnwb4epp2nlztmxgh6i/metadata.json",
+          metadata: {
+            description: "Dookies is a native Web3 native ad engine",
+            image:
+              "https://ipfs.io/ipfs/bafybeia2wj3kmqrppfzvjdhpe6kfwgkje5cnnzshncz3ycsidmkomjd6qy/_077fa265-d3f6-489e-b2db-8ecc1948a9a3.jpeg",
+            name: "Welcome to Dookies!",
+          },
+        }]);
+        return
+      }
+
       const provider = new JsonRpcProvider("https://rpc.sepolia.org/");
       const dookiesContract = new Contract(
         "0x0b6698f5833D8E262E604afC8aDf6CaB2cED365b",
@@ -104,6 +123,7 @@ export default function Home() {
         )
       );
 
+      console.log("userPreferences",userPreferences)
       console.log("filteredAds", filteredAds);
 
       setAds(filteredAds);
