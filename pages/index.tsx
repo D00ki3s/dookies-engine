@@ -98,11 +98,13 @@ export default function Home() {
         }) ?? []
       );
 
-      const filteredAds = adsWithMetadata.filter((ad) =>
+      const filteredAds = adsWithMetadata?.filter((ad) =>
         ad.metadata.properties.targetedGroups?.find((group: string) =>
           userPreferences.includes(group)
         )
       );
+
+      console.log("filteredAds", filteredAds);
 
       setAds(filteredAds);
     }
@@ -119,8 +121,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [ads]);
 
-  const ad = ads[adIndex];
-
+  const ad = ads[adIndex] as any;
   return (
     <div className={styles.container}>
       <Head>
@@ -130,7 +131,11 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <a href={ad.adCreative} className={styles.ad}>
+        <a
+          href={ad.metadata?.properties?.adUrl}
+          className={styles.ad}
+          target="_blank"
+        >
           <div
             className={styles.image}
             style={{ backgroundImage: `url(${ad.metadata.image})` }}
@@ -138,9 +143,6 @@ export default function Home() {
             <div className={styles.overlay}>
               <h3 className={styles.title}>{ad.name}</h3>
               <p className={styles.description}>{ad.metadata.description}</p>
-              <div className={styles.byDookies}>
-                Powered by <span className={styles.logo}>Dookies</span>
-              </div>
             </div>
           </div>
         </a>
